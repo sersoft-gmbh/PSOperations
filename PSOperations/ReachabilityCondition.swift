@@ -10,6 +10,12 @@ This file shows an example of implementing the OperationCondition protocol.
 
 import Foundation
 import SystemConfiguration
+    
+public extension ErrorInformationKey {
+    public static var reachabilityHost: ErrorInformationKey<URL> {
+        return .init(rawValue: "ReachabilityHost")
+    }
+}
 
 /**
     This is a condition that performs a very high-level reachability check.
@@ -38,10 +44,8 @@ public struct ReachabilityCondition: OperationCondition {
                 completion(.satisfied)
             }
             else {
-                let error = NSError(code: .conditionFailed, userInfo: [
-                    OperationConditionKey: type(of: self).name,
-                    type(of: self).hostKey: self.host
-                ])
+                let info = ErrorInformation(key: .reachabilityHost, value: self.host)
+                let error = ConditionError(condition: self, errorInformation: info)
                 
                 completion(.failed(error))
             }

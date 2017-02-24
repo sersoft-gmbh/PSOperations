@@ -8,6 +8,12 @@ The file shows how to make an OperationCondition that composes another Operation
 
 import Foundation
 
+public extension ErrorInformationKey {
+    public static var negatedCondition: ErrorInformationKey<OperationCondition> {
+        return .init(rawValue: "NegatedCondition")
+    }
+}
+
 /**
     A simple condition that negates the evaluation of another condition.
     This is useful (for example) if you want to only execute an operation if the 
@@ -16,10 +22,6 @@ import Foundation
 public struct NegatedCondition<T: OperationCondition>: OperationCondition {
     public static var name: String { 
         return "Not<\(T.name)>"
-    }
-    
-    static var negatedConditionKey: String { 
-        return "NegatedCondition"
     }
     
     public static var isMutuallyExclusive: Bool {
@@ -44,10 +46,8 @@ public struct NegatedCondition<T: OperationCondition>: OperationCondition {
                 completion(.satisfied)
             case .satisfied:
                 // If the composed condition succeeded, then this one failed.
-                let error = NSError(code: .conditionFailed, userInfo: [
-                    OperationConditionKey: type(of: self).name,
-                    type(of: self).negatedConditionKey: type(of: self.condition).name
-                    ])
+                let info = ErrorInformation(key: .negatedCondition, value: self.condition)
+                let error = ConditionError(condition: self, errorInformation: info)
                 
                 completion(.failed(error))
             }

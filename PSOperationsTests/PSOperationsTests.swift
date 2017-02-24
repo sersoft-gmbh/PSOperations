@@ -1096,7 +1096,7 @@ class PSOperationsTests: XCTestCase {
         waitForExpectations(timeout: 1.0, handler: nil)
     }
     
-    struct OpError: PSError, Equatable {
+    struct OpError: Error, Equatable {
         let identifier: String
         
         static func ==(lhs: OpError, rhs: OpError) -> Bool {

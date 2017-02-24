@@ -8,6 +8,12 @@ This file shows an example of implementing the OperationCondition protocol.
 
 import Foundation
 
+public extension ErrorInformationKey {
+    public static var cancelledDependencies: ErrorInformationKey<Array<Foundation.Operation>> {
+        return .init(rawValue: "CancelledDependencies")
+    }
+}
+
 /**
     A condition that specifies that every dependency must have succeeded.
     If any dependency was cancelled, the target operation will be cancelled as 
@@ -15,7 +21,6 @@ import Foundation
 */
 public struct NoCancelledDependencies: OperationCondition {
     public static let name = "NoCancelledDependencies"
-    static let cancelledDependenciesKey = "CancelledDependencies"
     public static let isMutuallyExclusive = false
     
     public init() {
@@ -32,11 +37,8 @@ public struct NoCancelledDependencies: OperationCondition {
 
         if !cancelled.isEmpty {
             // At least one dependency was cancelled; the condition was not satisfied.
-            let error = NSError(code: .conditionFailed, userInfo: [
-                OperationConditionKey: type(of: self).name,
-                type(of: self).cancelledDependenciesKey: cancelled
-            ])
-            
+            let info = ErrorInformation(key: .cancelledDependencies, value: cancelled)
+            let error = ConditionError(condition: self, errorInformation: info)
             completion(.failed(error))
         }
         else {

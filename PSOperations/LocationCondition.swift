@@ -7,8 +7,17 @@ This file shows an example of implementing the OperationCondition protocol.
 */
 
 #if !os(OSX)
-
 import CoreLocation
+    
+public extension ErrorInformationKey {
+    public static var locationServicesEnabled: ErrorInformationKey<Bool> {
+        return .init(rawValue: "CLLocationServicesEnabled")
+    }
+    
+    public static var locationAuthorizationStatus: ErrorInformationKey<CLAuthorizationStatus> {
+        return .init(rawValue: "CLAuthorizationStatus")
+    }
+}
 
 /// A condition for verifying access to the user's location.
 @available(*, deprecated, message: "use Capability(Location...) instead")
@@ -26,8 +35,6 @@ public struct LocationCondition: OperationCondition {
     }
     
     public static let name = "Location"
-    static let locationServicesEnabledKey: NSString = "CLLocationServicesEnabled"
-    static let authorizationStatusKey: NSString = "CLAuthorizationStatus"
     public static let isMutuallyExclusive = false
     
     let usage: Usage
@@ -44,19 +51,12 @@ public struct LocationCondition: OperationCondition {
         let enabled = CLLocationManager.locationServicesEnabled()
         let actual = CLLocationManager.authorizationStatus()
         
-        var error: NSError?
+        var errorInformation: ErrorInformation?
         
         // There are several factors to consider when evaluating this condition
         switch (enabled, usage, actual) {
-        case (true, _, .authorizedAlways):
-            // The service is enabled, and we have "Always" permission -> condition satisfied.
-            break
-            
-        case (true, .whenInUse, .authorizedWhenInUse):
-            /*
-            The service is enabled, and we have and need "WhenInUse"
-            permission -> condition satisfied.
-            */
+        case (true, _, .authorizedAlways), // The service is enabled, and we have "Always" permission -> condition satisfied.
+        (true, .whenInUse, .authorizedWhenInUse): // The service is enabled, and we have and need "WhenInUse" permission -> condition satisfied.
             break
             
         default:
@@ -68,19 +68,12 @@ public struct LocationCondition: OperationCondition {
             
             The last case would happen if this condition were wrapped in a `SilentCondition`.
             */
-            
-            error = NSError(
-                code: .conditionFailed,
-                userInfo: [
-                    OperationConditionKey: type(of: self).name,
-                    type(of: self).locationServicesEnabledKey: enabled,
-                    type(of: self).authorizationStatusKey: Int(actual.rawValue)
-                ]
-            )
+            errorInformation = ErrorInformation(key: .locationServicesEnabled, value: enabled)
+            errorInformation?.set(value: actual, for: .locationAuthorizationStatus)
         }
         
-        if let error = error {
-            completion(.failed(error))
+        if let info = errorInformation {
+            completion(.failed(ConditionError(condition: self, errorInformation: info)))
         }
         else {
             completion(.satisfied)

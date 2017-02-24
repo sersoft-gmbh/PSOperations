@@ -9,6 +9,16 @@ This file shows an example of implementing the OperationCondition protocol.
 #if os(iOS)
 
 import UIKit
+    
+public extension ErrorInformationKey {
+    public static var userNotificationsCurrentSettings: ErrorInformationKey<UIUserNotificationSettings> {
+        return .init(rawValue: "CurrentUserNotificationSettings")
+    }
+    
+    public static var userNotificationsDesiredSettings: ErrorInformationKey<UIUserNotificationSettings> {
+        return .init(rawValue: "DesiredUserNotificationSettigns")
+    }
+}
 
 /**
     A condition for verifying that we can present alerts to the user via 
@@ -65,18 +75,14 @@ public struct UserNotificationCondition: OperationCondition {
         
         let current = application.currentUserNotificationSettings
         
-        switch (current, settings)  {
-        case (let current?, let settings) where current.contains(settings):
+        if let current = current, current.contains(settings) {
             result = .satisfied
-            
-        default:
-            let error = NSError(code: .conditionFailed, userInfo: [
-                OperationConditionKey: type(of: self).name,
-                type(of: self).currentSettings: current ?? NSNull(),
-                type(of: self).desiredSettings: settings
-                ])
-            
-            result = .failed(error)
+        } else {
+            var info = ErrorInformation(key: .userNotificationsDesiredSettings, value: settings)
+            if let current = current {
+                info.set(value: current, for: .userNotificationsCurrentSettings)
+            }
+            result = .failed(ConditionError(condition: self, errorInformation: info))
         }
         
         completion(result)

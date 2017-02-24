@@ -8,18 +8,15 @@ This file contains the fundamental logic relating to Operation conditions.
 
 import Foundation
 
-public let OperationConditionKey = "OperationCondition"
-
 /**
     A protocol for defining conditions that must be satisfied in order for an
     operation to begin execution.
 */
 public protocol OperationCondition {
     /** 
-        The name of the condition. This is used in userInfo dictionaries of `.ConditionFailed` 
-        errors as the value of the `OperationConditionKey` key.
+        The name of the condition. This is will be passed as `conditionName` in `ConditionError`s.
     */
-     static var name: String { get }
+    static var name: String { get }
     
     /**
         Specifies whether multiple instances of the conditionalized operation may
@@ -51,9 +48,9 @@ public protocol OperationCondition {
 */
 public enum OperationConditionResult {
     case satisfied
-    case failed(NSError)
+    case failed(ConditionError)
     
-    var error: NSError? {
+    var error: ConditionError? {
         switch self {
         case .failed(let error):
             return error
@@ -61,16 +58,23 @@ public enum OperationConditionResult {
             return nil
         }
     }
+    
+    public static func ==(lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
+        switch (lhs, rhs) {
+        case (.satisfied, .satisfied):
+            return true
+        case (.failed(let lError), .failed(let rError)):
+            return lError == rError
+        default:
+            return false
+        }
+    }
 }
 
-func ==(lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
-    switch (lhs, rhs) {
-    case (.satisfied, .satisfied):
-        return true
-    case (.failed(let lError), .failed(let rError)) where lError == rError:
-        return true
-    default:
-        return false
+fileprivate extension ConditionError {
+    init(name: String, errorInformation: ErrorInformation? = nil) {
+        self.conditionName = name
+        self.information = errorInformation
     }
 }
 
@@ -78,11 +82,11 @@ func ==(lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
 // MARK: Evaluate Conditions
 
 struct OperationConditionEvaluator {
-    static func evaluate(_ conditions: [OperationCondition], operation: Operation, completion: @escaping ([NSError]) -> Void) {
+    static func evaluate(_ conditions: [OperationCondition], operation: Operation, completion: @escaping ([ConditionError]) -> Void) {
         // Check conditions.
         let conditionGroup = DispatchGroup()
 
-        var results = [OperationConditionResult?](repeating: nil, count: conditions.count)
+        var results = [(OperationConditionResult)?](repeating: nil, count: conditions.count)
         
         // Ask each condition to evaluate and store its result in the "results" array.
         for (index, condition) in conditions.enumerated() {
@@ -103,7 +107,7 @@ struct OperationConditionEvaluator {
                 check for that.
             */
             if operation.isCancelled {
-                failures.append(NSError(code: .conditionFailed))
+                failures.append(ConditionError(name: "AnyCondition"))
             }
             
             completion(failures)

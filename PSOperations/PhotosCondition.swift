@@ -9,7 +9,7 @@ This file shows an example of implementing the OperationCondition protocol.
 #if os(iOS)
 
 import Photos
-
+    
 /// A condition for verifying access to the user's Photos library.
 @available(*, deprecated, message: "use Capability(Photos()) instead")
     
@@ -30,10 +30,7 @@ public struct PhotosCondition: OperationCondition {
                 completion(.satisfied)
 
             default:
-                let error = NSError(code: .conditionFailed, userInfo: [
-                    OperationConditionKey: type(of: self).name as NSString
-                ])
-
+                let error = ConditionError(condition: self)
                 completion(.failed(error))
         }
     }

@@ -10,6 +10,12 @@ This file shows an example of implementing the OperationCondition protocol.
     
     import EventKit
     
+    public extension ErrorInformationKey {
+        public static var eventKitEntityType: ErrorInformationKey<EKEntityType> {
+            return .init(rawValue: "EKEntityType")
+        }
+    }
+    
     /// A condition for verifying access to the user's calendar.
     
     @available(*, deprecated, message: "use Capability(EKEntityType....) instead")
@@ -17,7 +23,6 @@ This file shows an example of implementing the OperationCondition protocol.
     public struct CalendarCondition: OperationCondition {
         
         public static let name = "Calendar"
-        static let entityTypeKey = "EKEntityType"
         public static let isMutuallyExclusive = false
         
         public let entityType: EKEntityType
@@ -37,10 +42,8 @@ This file shows an example of implementing the OperationCondition protocol.
                 
             default:
                 // We are not authorized to access entities of this type.
-                let error = NSError(code: .conditionFailed, userInfo: [
-                    OperationConditionKey: type(of: self).name,
-                    type(of: self).entityTypeKey: entityType.rawValue
-                    ])
+                let info = ErrorInformation(key: .eventKitEntityType, value: entityType)
+                let error = ConditionError(condition: self, errorInformation: info)
                 
                 completion(.failed(error))
             }

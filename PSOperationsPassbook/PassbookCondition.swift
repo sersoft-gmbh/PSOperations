@@ -10,7 +10,7 @@ This file shows an example of implementing the OperationCondition protocol.
     
 import PassKit
 import PSOperations
-
+    
 /// A condition for verifying that Passbook exists and is accessible.
 @available(*, deprecated, message: "use Capability(Passbook....) instead")
     
@@ -34,9 +34,7 @@ public struct PassbookCondition: OperationCondition {
             completion(.satisfied)
         }
         else {
-            let error = NSError(code: .conditionFailed, userInfo: [
-                OperationConditionKey: type(of: self).name
-            ])
+            let error = ConditionError(condition: self)
 
             completion(.failed(error))
         }

@@ -9,6 +9,16 @@ This file shows an example of implementing the OperationCondition protocol.
 #if !os(watchOS)
 
 import CloudKit
+    
+public extension ErrorInformationKey {
+    public static var cloudKitContainer: ErrorInformationKey<CKContainer> {
+        return .init(rawValue: "CKContainer")
+    }
+
+    public static var cloudKitError: ErrorInformationKey<Error> {
+        return .init(rawValue: "CKError")
+    }
+}
 
 /// A condition describing that the operation requires access to a specific CloudKit container.
 @available(*, deprecated, message: "use Capability(iCloudContainer(...)) instead")
@@ -16,7 +26,6 @@ import CloudKit
 public struct CloudContainerCondition: OperationCondition {
     
     public static let name = "CloudContainer"
-    static let containerKey = "CKContainer"
     
     /*
         CloudKit has no problem handling multiple operations at the same time
@@ -47,11 +56,9 @@ public struct CloudContainerCondition: OperationCondition {
     public func evaluateForOperation(_ operation: Operation, completion: @escaping (OperationConditionResult) -> Void) {
         container.verifyPermission(permission, requestingIfNecessary: false) { error in
             if let error = error {
-                let conditionError = NSError(code: .conditionFailed, userInfo: [
-                    OperationConditionKey: type(of: self).name,
-                    type(of: self).containerKey: self.container,
-                    NSUnderlyingErrorKey: error
-                ])
+                var info = ErrorInformation(key: .cloudKitContainer, value: self.container)
+                info.set(value: error, for: .cloudKitError)
+                let conditionError = ConditionError(condition: self, errorInformation: info)
 
                 completion(.failed(conditionError))
             }

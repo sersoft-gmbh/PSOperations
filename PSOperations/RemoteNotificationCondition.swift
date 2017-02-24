@@ -10,12 +10,21 @@ This file shows an example of implementing the OperationCondition protocol.
 
 import UIKit
     
+public extension ErrorInformationKey {
+    public static var remoteNotificationError: ErrorInformationKey<Error> {
+        return .init(rawValue: "RemoteNotificationError")
+    }
+}
+    
 private let RemoteNotificationQueue = OperationQueue()
-private let RemoteNotificationName = "RemoteNotificationPermissionNotification"
+    
+fileprivate extension Notification.Name {
+    static let remoteNotification: Notification.Name = .init(rawValue: "_RemoteNotificationPermissionNotification")
+}
 
 private enum RemoteRegistrationResult {
     case token(Data)
-    case error(NSError)
+    case error(Error)
 }
 
 /// A condition for verifying that the app has the ability to receive push notifications.
@@ -26,13 +35,13 @@ public struct RemoteNotificationCondition: OperationCondition {
     public static let isMutuallyExclusive = false
     
     static func didReceiveNotificationToken(_ token: Data) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: RemoteNotificationName), object: nil, userInfo: [
+        NotificationCenter.default.post(name: .remoteNotification, object: nil, userInfo: [
             "token": token
         ])
     }
     
-    static func didFailToRegister(_ error: NSError) {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: RemoteNotificationName), object: nil, userInfo: [
+    static func didFailToRegister(_ error: Error) {
+        NotificationCenter.default.post(name: .remoteNotification, object: nil, userInfo: [
             "error": error
         ])
     }
@@ -58,10 +67,8 @@ public struct RemoteNotificationCondition: OperationCondition {
                     completion(.satisfied)
 
                 case .error(let underlyingError):
-                    let error = NSError(code: .conditionFailed, userInfo: [
-                        OperationConditionKey: type(of: self).name,
-                        NSUnderlyingErrorKey: underlyingError
-                    ])
+                    let info = ErrorInformation(key: .remoteNotificationError, value: underlyingError)
+                    let error = ConditionError(condition: self, errorInformation: info)
 
                     completion(.failed(error))
             }
@@ -101,7 +108,7 @@ class RemoteNotificationPermissionOperation: Operation {
         DispatchQueue.main.async {
             let notificationCenter = NotificationCenter.default
             
-            notificationCenter.addObserver(self, selector: #selector(RemoteNotificationPermissionOperation.didReceiveResponse(_:)), name: NSNotification.Name(rawValue: RemoteNotificationName), object: nil)
+            notificationCenter.addObserver(self, selector: #selector(RemoteNotificationPermissionOperation.didReceiveResponse(_:)), name: .remoteNotification, object: nil)
             
             self.application.registerForRemoteNotifications()
         }
@@ -110,15 +117,13 @@ class RemoteNotificationPermissionOperation: Operation {
     @objc func didReceiveResponse(_ notification: Notification) {
         NotificationCenter.default.removeObserver(self)
         
-        let userInfo = (notification as NSNotification).userInfo
+        let userInfo = notification.userInfo
 
         if let token = userInfo?["token"] as? Data {
             handler(.token(token))
-        }
-        else if let error = userInfo?["error"] as? NSError {
+        } else if let error = userInfo?["error"] as? Error {
             handler(.error(error))
-        }
-        else {
+        } else {
             fatalError("Received a notification without a token and without an error.")
         }
 

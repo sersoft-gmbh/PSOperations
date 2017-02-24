@@ -16,12 +16,19 @@ import PSOperations
     A condition to indicate an `Operation` requires access to the user's health
     data.
 */
+public extension ErrorInformationKey {
+    public static var healthDataAvailable: ErrorInformationKey<Bool> {
+        return .init(rawValue: "HealthDataAvailable")
+    }
+    
+    public static var healthUnauthorizedShareTypes: ErrorInformationKey<Set<HKSampleType>> {
+        return .init(rawValue: "HealthUnauthorizedShareTypes")
+    }
+}
     
 @available(*, deprecated, message: "use Capability(Health(...)) instead")
 public struct HealthCondition: OperationCondition {
     public static let name = "Health"
-    static let healthDataAvailable = "HealthDataAvailable"
-    static let unauthorizedShareTypesKey = "UnauthorizedShareTypes"
     public static let isMutuallyExclusive = false
     
     let shareTypes: Set<HKSampleType>
@@ -84,11 +91,9 @@ public struct HealthCondition: OperationCondition {
     
     // Break this out in to its own method so we don't clutter up the evaluate... method.
     fileprivate func failed(_ unauthorizedShareTypes: Set<HKSampleType>, completion: (OperationConditionResult) -> Void) {
-        let error = NSError(code: .conditionFailed, userInfo: [
-            OperationConditionKey: type(of: self).name,
-            type(of: self).healthDataAvailable: HKHealthStore.isHealthDataAvailable(),
-            type(of: self).unauthorizedShareTypesKey: unauthorizedShareTypes
-        ])
+        var info = ErrorInformation(key: .healthDataAvailable, value: HKHealthStore.isHealthDataAvailable())
+        info.set(value: unauthorizedShareTypes, for: .healthUnauthorizedShareTypes)
+        let error = ConditionError(condition: self, errorInformation: info)
 
         completion(.failed(error))
     }

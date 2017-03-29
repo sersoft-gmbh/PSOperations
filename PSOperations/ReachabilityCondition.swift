@@ -10,12 +10,20 @@ This file shows an example of implementing the OperationCondition protocol.
 
 import Foundation
 import SystemConfiguration
-    
+
+#if swift(>=3.1)
+public extension ErrorInformation.Key {
+    public static var reachabilityHost: ErrorInformation.Key<URL> {
+        return .init(rawValue: "ReachabilityHost")
+    }
+}
+#else
 public extension ErrorInformationKey {
     public static var reachabilityHost: ErrorInformationKey<URL> {
         return .init(rawValue: "ReachabilityHost")
     }
 }
+#endif
 
 /**
     This is a condition that performs a very high-level reachability check.
@@ -28,7 +36,6 @@ public struct ReachabilityCondition: OperationCondition {
     public static let isMutuallyExclusive = false
     
     let host: URL
-    
     
     public init(host: URL) {
         self.host = host

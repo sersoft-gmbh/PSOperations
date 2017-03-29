@@ -52,11 +52,19 @@ public extension CapabilityError {
     }
 }
 
+#if swift(>=3.1)
+public extension ErrorInformation.Key {
+    public static var capabilityError: ErrorInformation.Key<CapabilityError> {
+        return .init(rawValue: "CapabilityError")
+    }
+}
+#else
 public extension ErrorInformationKey {
     public static var capabilityError: ErrorInformationKey<CapabilityError> {
         return .init(rawValue: "CapabilityError")
     }
 }
+#endif
 
 public enum CapabilityStatus: Equatable {
     /// The capability has not been requested yet

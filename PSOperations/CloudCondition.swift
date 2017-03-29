@@ -9,7 +9,18 @@ This file shows an example of implementing the OperationCondition protocol.
 #if !os(watchOS)
 
 import CloudKit
-    
+
+#if swift(>=3.1)
+public extension ErrorInformation.Key {
+    public static var cloudKitContainer: ErrorInformation.Key<CKContainer> {
+        return .init(rawValue: "CKContainer")
+    }
+
+    public static var cloudKitError: ErrorInformation.Key<Error> {
+        return .init(rawValue: "CKError")
+    }
+}
+#else
 public extension ErrorInformationKey {
     public static var cloudKitContainer: ErrorInformationKey<CKContainer> {
         return .init(rawValue: "CKContainer")
@@ -19,6 +30,7 @@ public extension ErrorInformationKey {
         return .init(rawValue: "CKError")
     }
 }
+#endif
 
 /// A condition describing that the operation requires access to a specific CloudKit container.
 @available(*, deprecated, message: "use Capability(iCloudContainer(...)) instead")

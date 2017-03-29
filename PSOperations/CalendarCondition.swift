@@ -10,11 +10,19 @@ This file shows an example of implementing the OperationCondition protocol.
     
     import EventKit
     
+    #if swift(>=3.1)
+    public extension ErrorInformation.Key {
+        public static var eventKitEntityType: ErrorInformation.Key<EKEntityType> {
+            return .init(rawValue: "EKEntityType")
+        }
+    }
+    #else
     public extension ErrorInformationKey {
         public static var eventKitEntityType: ErrorInformationKey<EKEntityType> {
             return .init(rawValue: "EKEntityType")
         }
     }
+    #endif
     
     /// A condition for verifying access to the user's calendar.
     

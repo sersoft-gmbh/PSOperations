@@ -16,6 +16,17 @@ import PSOperations
     A condition to indicate an `Operation` requires access to the user's health
     data.
 */
+#if swift(>=3.1)
+    public extension ErrorInformation.Key {
+        public static var healthDataAvailable: ErrorInformation.Key<Bool> {
+            return .init(rawValue: "HealthDataAvailable")
+        }
+        
+        public static var healthUnauthorizedShareTypes: ErrorInformation.Key<Set<HKSampleType>> {
+            return .init(rawValue: "HealthUnauthorizedShareTypes")
+        }
+    }
+#else
 public extension ErrorInformationKey {
     public static var healthDataAvailable: ErrorInformationKey<Bool> {
         return .init(rawValue: "HealthDataAvailable")
@@ -25,6 +36,7 @@ public extension ErrorInformationKey {
         return .init(rawValue: "HealthUnauthorizedShareTypes")
     }
 }
+#endif
     
 @available(*, deprecated, message: "use Capability(Health(...)) instead")
 public struct HealthCondition: OperationCondition {

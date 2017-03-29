@@ -9,6 +9,17 @@ This file shows an example of implementing the OperationCondition protocol.
 #if !os(OSX)
 import CoreLocation
     
+#if swift(>=3.1)
+public extension ErrorInformation.Key {
+    public static var locationServicesEnabled: ErrorInformation.Key<Bool> {
+        return .init(rawValue: "CLLocationServicesEnabled")
+    }
+    
+    public static var locationAuthorizationStatus: ErrorInformation.Key<CLAuthorizationStatus> {
+        return .init(rawValue: "CLAuthorizationStatus")
+    }
+}
+#else
 public extension ErrorInformationKey {
     public static var locationServicesEnabled: ErrorInformationKey<Bool> {
         return .init(rawValue: "CLLocationServicesEnabled")
@@ -18,6 +29,7 @@ public extension ErrorInformationKey {
         return .init(rawValue: "CLAuthorizationStatus")
     }
 }
+#endif
 
 /// A condition for verifying access to the user's location.
 @available(*, deprecated, message: "use Capability(Location...) instead")

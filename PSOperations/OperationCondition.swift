@@ -78,7 +78,6 @@ fileprivate extension ConditionError {
     }
 }
 
-
 // MARK: Evaluate Conditions
 
 struct OperationConditionEvaluator {

@@ -9,7 +9,18 @@ This file shows an example of implementing the OperationCondition protocol.
 #if os(iOS)
 
 import UIKit
+
+#if swift(>=3.1)
+public extension ErrorInformation.Key {
+    public static var userNotificationsCurrentSettings: ErrorInformation.Key<UIUserNotificationSettings> {
+        return .init(rawValue: "CurrentUserNotificationSettings")
+    }
     
+    public static var userNotificationsDesiredSettings: ErrorInformation.Key<UIUserNotificationSettings> {
+        return .init(rawValue: "DesiredUserNotificationSettigns")
+    }
+}
+#else
 public extension ErrorInformationKey {
     public static var userNotificationsCurrentSettings: ErrorInformationKey<UIUserNotificationSettings> {
         return .init(rawValue: "CurrentUserNotificationSettings")
@@ -19,6 +30,7 @@ public extension ErrorInformationKey {
         return .init(rawValue: "DesiredUserNotificationSettigns")
     }
 }
+#endif
 
 /**
     A condition for verifying that we can present alerts to the user via 

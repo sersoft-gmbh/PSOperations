@@ -10,11 +10,19 @@
 import XCTest
 import Foundation
 
+#if swift(>=3.1)
+extension ErrorInformation.Key {
+    static var failed: ErrorInformation.Key<Bool> {
+        return .init(rawValue: "Failed")
+    }
+}
+#else
 extension ErrorInformationKey {
     static var failed: ErrorInformationKey<Bool> {
         return .init(rawValue: "Failed")
     }
 }
+#endif
 
 struct TestCondition: OperationCondition {
     

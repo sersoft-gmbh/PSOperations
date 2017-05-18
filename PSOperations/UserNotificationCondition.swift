@@ -37,7 +37,6 @@ public extension ErrorInformationKey {
     `UILocalNotification` and/or remote notifications.
 */
 @available(*, deprecated, message: "use Capability(UserNotification(...)) instead")
-
 public struct UserNotificationCondition: OperationCondition {
     
     public enum Behavior {
@@ -105,6 +104,7 @@ public struct UserNotificationCondition: OperationCondition {
     A private `Operation` subclass to register a `UIUserNotificationSettings`
     object with a `UIApplication`, prompting the user for permission if necessary.
 */
+@available(*, deprecated, message: "use Capability(UserNotification(...)) instead")
 private class UserNotificationPermissionOperation: Operation {
     let settings: UIUserNotificationSettings
     let application: UIApplication

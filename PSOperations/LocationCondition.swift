@@ -33,7 +33,6 @@ public extension ErrorInformationKey {
 
 /// A condition for verifying access to the user's location.
 @available(*, deprecated, message: "use Capability(Location...) instead")
-
 public struct LocationCondition: OperationCondition {
     /**
      Declare a new enum instead of using `CLAuthorizationStatus`, because that
@@ -97,7 +96,8 @@ public struct LocationCondition: OperationCondition {
  A private `Operation` that will request permission to access the user's location,
  if permission has not already been granted.
  */
-class LocationPermissionOperation: Operation {
+@available(*, deprecated, message: "use Capability(Location...) instead")
+private class LocationPermissionOperation: Operation {
     let usage: LocationCondition.Usage
     var manager: CLLocationManager?
     
@@ -170,6 +170,7 @@ class LocationPermissionOperation: Operation {
     
 }
 
+@available(*, deprecated, message: "use Capability(Location...) instead")
 extension LocationPermissionOperation: CLLocationManagerDelegate {
     @objc func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if manager == self.manager && isExecuting && status != .notDetermined {

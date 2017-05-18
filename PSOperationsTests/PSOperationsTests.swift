@@ -461,11 +461,11 @@ class PSOperationsTests: XCTestCase {
                 cancelExp.fulfill()
             },
             produceHandler: {
-                _ in
+                _, _ in
                 produceExp.fulfill()
             },
             finishHandler: {
-                _ in
+                _, _ in
                 finishExp.fulfill()
         }))
         
@@ -782,11 +782,11 @@ class PSOperationsTests: XCTestCase {
                 exp1.fulfill()
             },
             produceHandler: {
-                _ in
+                _, _ in
                 exp2.fulfill()
             },
             finishHandler: {
-                _ in
+                _, _ in
                 exp3.fulfill()
             }
         )
@@ -1049,7 +1049,7 @@ class PSOperationsTests: XCTestCase {
             }
             
             let blockOp = PSOperations.BlockOperation {
-                (finishBlock: (Void) -> Void) in
+                (finishBlock: () -> Void) in
                 finishBlock()
                 go()
             }

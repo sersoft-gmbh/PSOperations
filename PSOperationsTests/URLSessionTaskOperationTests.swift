@@ -76,7 +76,7 @@ class URLSessionTaskOperationTests: XCTestCase {
         q.addOperation(op)
         
         keyValueObservingExpectation(for: op, keyPath: "isFinished") {
-            _ in
+            _, _ in
             return op.isFinished
         }
         

@@ -59,11 +59,11 @@ class ErrorInformationTests: XCTestCase {
     
     func testErrorInformationKeyEquality() {
         #if swift(>=3.1)
-        let key1: ErrorInformation.Key<Bool> = .boolTest
-        let key2: ErrorInformation.Key<Bool> = .boolTest
+            let key1: ErrorInformation.Key<Bool> = .boolTest
+            let key2: ErrorInformation.Key<Bool> = .boolTest
         #else
-        let key1: ErrorInformationKey<Bool> = .boolTest
-        let key2: ErrorInformationKey<Bool> = .boolTest
+            let key1: ErrorInformationKey<Bool> = .boolTest
+            let key2: ErrorInformationKey<Bool> = .boolTest
         #endif
         
         XCTAssertTrue(key1 == key2)
@@ -73,13 +73,12 @@ class ErrorInformationTests: XCTestCase {
     
     func testErrorInformationKeyInequality() {
         #if swift(>=3.1)
-        let key1: ErrorInformation.Key<Bool> = .boolTest
-        let key2: ErrorInformation.Key<String> = .stringTest
+            let key1: ErrorInformation.Key<Bool> = .boolTest
+            let key2: ErrorInformation.Key<String> = .stringTest
         #else
-        let key1: ErrorInformationKey<Bool> = .boolTest
-        let key2: ErrorInformationKey<String> = .stringTest
+            let key1: ErrorInformationKey<Bool> = .boolTest
+            let key2: ErrorInformationKey<String> = .stringTest
         #endif
-        
         
         // Direct comparison is already prohibited by compiler due to different generic types.
         // XCTAssertFalse(key1 == key2)
@@ -97,11 +96,11 @@ class ErrorInformationTests: XCTestCase {
     
     func testErrorInformationStoringValues() {
         #if swift(>=3.1)
-        let key1: ErrorInformation.Key<Bool> = .boolTest
-        let key2: ErrorInformation.Key<String> = .stringTest
+            let key1: ErrorInformation.Key<Bool> = .boolTest
+            let key2: ErrorInformation.Key<String> = .stringTest
         #else
-        let key1: ErrorInformationKey<Bool> = .boolTest
-        let key2: ErrorInformationKey<String> = .stringTest
+            let key1: ErrorInformationKey<Bool> = .boolTest
+            let key2: ErrorInformationKey<String> = .stringTest
         #endif
         let value1 = true
         let value2 = "test"
@@ -127,11 +126,11 @@ class ErrorInformationTests: XCTestCase {
     
     func testErrorInformationStoringValuesWithSameRawValue() {
         #if swift(>=3.1)
-        let key1: ErrorInformation.Key<Bool> = .sameKeyBool
-        let key2: ErrorInformation.Key<String> = .sameKeyString
+            let key1: ErrorInformation.Key<Bool> = .sameKeyBool
+            let key2: ErrorInformation.Key<String> = .sameKeyString
         #else
-        let key1: ErrorInformationKey<Bool> = .sameKeyBool
-        let key2: ErrorInformationKey<String> = .sameKeyString
+            let key1: ErrorInformationKey<Bool> = .sameKeyBool
+            let key2: ErrorInformationKey<String> = .sameKeyString
         #endif
         let value1 = true
         let value2 = "test"

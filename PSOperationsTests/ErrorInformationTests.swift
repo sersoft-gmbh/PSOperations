@@ -108,9 +108,16 @@ class ErrorInformationTests: XCTestCase {
         var info = ErrorInformation(key: key1, value: value1)
         info.set(value: value2, for: key2)
         
-        let retrievedValue1 = info.value(for: key1)
-        let retrievedValue2 = info.value(for: key2)
-        let retrievedInexistentValue = info.value(for: .inexistent)
+        #if swift(>=4.0)
+            let retrievedValue1 = info[key1]
+            let retrievedValue2 = info[key2]
+            let retrievedInexistentValue = info[.inexistent]
+        #else
+            let retrievedValue1 = info.value(for: key1)
+            let retrievedValue2 = info.value(for: key2)
+            let retrievedInexistentValue = info.value(for: .inexistent)
+        #endif
+        
         XCTAssertNil(retrievedInexistentValue)
         XCTAssertNotNil(retrievedValue1)
         XCTAssertNotNil(retrievedValue2)
@@ -131,9 +138,15 @@ class ErrorInformationTests: XCTestCase {
         var info = ErrorInformation(key: key1, value: value1)
         info.set(value: value2, for: key2)
         
-        let retrievedValue1 = info.value(for: key1)
-        let retrievedValue2 = info.value(for: key2)
-        let retrievedInexistentValue = info.value(for: .inexistent)
+        #if swift(>=4.0)
+            let retrievedValue1 = info[key1]
+            let retrievedValue2 = info[key2]
+            let retrievedInexistentValue = info[.inexistent]
+        #else
+            let retrievedValue1 = info.value(for: key1)
+            let retrievedValue2 = info.value(for: key2)
+            let retrievedInexistentValue = info.value(for: .inexistent)
+        #endif
         XCTAssertNil(retrievedInexistentValue)
         XCTAssertNotNil(retrievedValue1)
         XCTAssertNotNil(retrievedValue2)

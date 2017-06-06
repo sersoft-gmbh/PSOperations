@@ -38,6 +38,7 @@ public struct ErrorInformation {
         infoDict[key.rawKey] = value
     }
     
+    @available(swift, introduced: 3.1, obsoleted: 4.0, message: "Use subscript")
     public func value<T>(for key: Key<T>) -> T? {
         return infoDict[key.rawKey] as? T
     }
@@ -54,11 +55,13 @@ public struct ErrorInformation {
         return infoDict[key.rawKey] as? T
     }
     #endif
-
-    // For Swift 4.0
-//    public subscript<T>(_ key: ErrorInformation.Key<T>) -> T? {
-//        return value(for: key)
-//    }
+    
+    #if swift(>=4.0)
+    @available(swift, introduced: 4.0)
+    public subscript<T>(_ key: ErrorInformation.Key<T>) -> T? {
+        return infoDict[key.rawKey] as? T
+    }
+    #endif
 }
 
 #if swift(>=3.1)

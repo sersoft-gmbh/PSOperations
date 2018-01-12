@@ -97,7 +97,7 @@ public struct LocationCondition: OperationCondition {
  if permission has not already been granted.
  */
 @available(*, deprecated, message: "use Capability(Location...) instead")
-private class LocationPermissionOperation: Operation {
+private class LocationPermissionOperation: Operation, CLLocationManagerDelegate {
     let usage: LocationCondition.Usage
     var manager: CLLocationManager?
     
@@ -167,11 +167,8 @@ private class LocationPermissionOperation: Operation {
         // This is helpful when developing the app.
         assert(Bundle.main.object(forInfoDictionaryKey: key) != nil, "Requesting location permission requires the \(key) key in your Info.plist")
     }
-    
-}
 
-@available(*, deprecated, message: "use Capability(Location...) instead")
-extension LocationPermissionOperation: CLLocationManagerDelegate {
+    // MARK: - CLLocationManagerDelegate
     @objc func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if manager == self.manager && isExecuting && status != .notDetermined {
             finish()

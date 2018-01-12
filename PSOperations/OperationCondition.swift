@@ -99,7 +99,11 @@ struct OperationConditionEvaluator {
         // After all the conditions have evaluated, this block will execute.
         conditionGroup.notify(queue: DispatchQueue.global(qos: DispatchQoS.QoSClass.default)) {
             // Aggregate the errors that occurred, in order.
+            #if swift(>=4.1)
+            var failures = results.compactMap { $0?.error }
+            #else
             var failures = results.flatMap { $0?.error }
+            #endif
             
             /*
                 If any of the conditions caused this operation to be cancelled, 

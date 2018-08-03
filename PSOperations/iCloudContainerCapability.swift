@@ -16,12 +16,19 @@ public struct iCloudContainer: CapabilityType {
     public static let name = "iCloudContainer"
     
     fileprivate let container: CKContainer
-    fileprivate let permissions: CKApplicationPermissions
-    
+    fileprivate let permissions: CKContainer_Application_Permissions
+
+    #if swift(>=4.2)
+    public init(container: CKContainer, permissions: CKContainer_Application_Permissions = []) {
+        self.container = container
+        self.permissions = permissions
+    }
+    #else
     public init(container: CKContainer, permissions: CKApplicationPermissions = []) {
         self.container = container
         self.permissions = permissions
     }
+    #endif
     
     public func requestStatus(_ completion: @escaping (CapabilityStatus) -> Void) {
         verifyAccountStatus(container, permission: permissions, shouldRequest: false, completion: completion)
@@ -33,7 +40,11 @@ public struct iCloudContainer: CapabilityType {
     
 }
 
-private func verifyAccountStatus(_ container: CKContainer, permission: CKApplicationPermissions, shouldRequest: Bool, completion: @escaping (CapabilityStatus) -> Void) {
+#if !swift(>=4.2)
+fileprivate typealias CKContainer_Application_Permissions = CKApplicationPermissions
+#endif
+
+private func verifyAccountStatus(_ container: CKContainer, permission: CKContainer_Application_Permissions, shouldRequest: Bool, completion: @escaping (CapabilityStatus) -> Void) {
     container.accountStatus { accountStatus, accountError in
         switch accountStatus {
             case .noAccount: completion(.notAvailable)
@@ -51,7 +62,7 @@ private func verifyAccountStatus(_ container: CKContainer, permission: CKApplica
     }
 }
 
-private func verifyPermission(_ container: CKContainer, permission: CKApplicationPermissions, shouldRequest: Bool, completion: @escaping (CapabilityStatus) -> Void) {
+private func verifyPermission(_ container: CKContainer, permission: CKContainer_Application_Permissions, shouldRequest: Bool, completion: @escaping (CapabilityStatus) -> Void) {
     container.status(forApplicationPermission: permission) { permissionStatus, permissionError in
         switch permissionStatus {
             case .initialState:
@@ -69,7 +80,7 @@ private func verifyPermission(_ container: CKContainer, permission: CKApplicatio
     }
 }
 
-private func requestPermission(_ container: CKContainer, permission: CKApplicationPermissions, completion: @escaping (CapabilityStatus) -> Void) {
+private func requestPermission(_ container: CKContainer, permission: CKContainer_Application_Permissions, completion: @escaping (CapabilityStatus) -> Void) {
     DispatchQueue.main.async {
         container.requestApplicationPermission(permission) { requestStatus, requestError in
             switch requestStatus {

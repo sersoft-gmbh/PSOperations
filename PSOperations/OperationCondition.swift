@@ -46,7 +46,7 @@ public protocol OperationCondition {
     An enum to indicate whether an `OperationCondition` was satisfied, or if it 
     failed with an error.
 */
-public enum OperationConditionResult {
+public enum OperationConditionResult: Equatable {
     case satisfied
     case failed(ConditionError)
     
@@ -57,24 +57,6 @@ public enum OperationConditionResult {
         default:
             return nil
         }
-    }
-    
-    public static func ==(lhs: OperationConditionResult, rhs: OperationConditionResult) -> Bool {
-        switch (lhs, rhs) {
-        case (.satisfied, .satisfied):
-            return true
-        case (.failed(let lError), .failed(let rError)):
-            return lError == rError
-        default:
-            return false
-        }
-    }
-}
-
-fileprivate extension ConditionError {
-    init(name: String, errorInformation: ErrorInformation? = nil) {
-        self.conditionName = name
-        self.information = errorInformation
     }
 }
 
@@ -106,7 +88,7 @@ struct OperationConditionEvaluator {
                 check for that.
             */
             if operation.isCancelled {
-                failures.append(ConditionError(name: "AnyCondition"))
+                failures.append(ConditionError(conditionName: "AnyCondition"))
             }
             
             completion(failures)

@@ -9,13 +9,6 @@
 import XCTest
 @testable import PSOperations
 
-fileprivate extension ConditionError {
-    init(name: String, errorInformation: ErrorInformation? = nil) {
-        self.conditionName = name
-        self.information = errorInformation
-    }
-}
-
 class OperationConditionResultTests: XCTestCase {
     
     func testOperationConditionResults_satisfied() {
@@ -26,7 +19,7 @@ class OperationConditionResultTests: XCTestCase {
     }
     
     func testOperationConditionResults_Failed_SameError() {
-        let error = ConditionError(name: "test")
+        let error = ConditionError(conditionName: "test")
         
         let failed1 = OperationConditionResult.failed(error)
         let failed2 = OperationConditionResult.failed(error)
@@ -36,8 +29,8 @@ class OperationConditionResultTests: XCTestCase {
     }
     
     func testOperationConditionResults_Failed_DiffError() {
-        let failed1 = OperationConditionResult.failed(ConditionError(name: "test1"))
-        let failed2 = OperationConditionResult.failed(ConditionError(name: "test2"))
+        let failed1 = OperationConditionResult.failed(ConditionError(conditionName: "test1"))
+        let failed2 = OperationConditionResult.failed(ConditionError(conditionName: "test2"))
         
         XCTAssertFalse(failed1 == failed2)
         
@@ -45,15 +38,15 @@ class OperationConditionResultTests: XCTestCase {
     
     func testOperationConditionResults_FailedAndSat() {
         let sat = OperationConditionResult.satisfied
-        let failed2 = OperationConditionResult.failed(ConditionError(name: "test"))
+        let failed2 = OperationConditionResult.failed(ConditionError(conditionName: "test"))
         
         XCTAssertFalse(sat == failed2)
         
     }
     
     func testOperationConditionResults_HasError() {
-        let failed = OperationConditionResult.failed(ConditionError(name: "test"))
-        
+        let failed = OperationConditionResult.failed(ConditionError(conditionName: "test"))
+
         XCTAssertNotNil(failed.error)
     }
     

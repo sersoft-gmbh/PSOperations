@@ -15,7 +15,7 @@ import Foundation
 public class TimeoutObserver: OperationObserver {
     // MARK: Properties
 
-    fileprivate let timeout: TimeInterval
+    private let timeout: TimeInterval
     
     // MARK: Initialization
     
@@ -59,10 +59,6 @@ public extension TimeoutObserver {
         
         fileprivate init(timeout: TimeInterval) {
             self.timeout = timeout
-        }
-        
-        public static func ==(lhs: TimeoutError, rhs: TimeoutError) -> Bool {
-            return lhs.timeout == rhs.timeout
         }
     }
 }

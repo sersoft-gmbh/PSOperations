@@ -8,19 +8,11 @@ The file shows how to make an OperationCondition that composes another Operation
 
 import Foundation
 
-#if swift(>=3.1)
 public extension ErrorInformation.Key {
     public static var negatedCondition: ErrorInformation.Key<OperationCondition> {
         return .init(rawValue: "NegatedCondition")
     }
 }
-#else
-public extension ErrorInformationKey {
-    public static var negatedCondition: ErrorInformationKey<OperationCondition> {
-        return .init(rawValue: "NegatedCondition")
-    }
-}
-#endif
 
 /**
     A simple condition that negates the evaluation of another condition.

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		071E3745211465D90086B313 /* OperationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43351B6A934A008F7F18 /* OperationErrors.swift */; };
 		07C0CF221E6036580040F454 /* ErrorInformationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C0CF211E6036580040F454 /* ErrorInformationTests.swift */; };
 		1D2DE5F51F55D1EE0080FF4F /* QualityOfService+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2DE5F41F55D1EE0080FF4F /* QualityOfService+.swift */; };
 		1D2DE6231F5600540080FF4F /* DispatchQueue+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D2DE6221F5600540080FF4F /* DispatchQueue+.swift */; };
@@ -25,7 +26,6 @@
 		1D9B43511B6A934A008F7F18 /* OperationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43321B6A934A008F7F18 /* OperationObserver.swift */; };
 		1D9B43521B6A934A008F7F18 /* BlockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43331B6A934A008F7F18 /* BlockObserver.swift */; };
 		1D9B43531B6A934A008F7F18 /* TimeoutObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43341B6A934A008F7F18 /* TimeoutObserver.swift */; };
-		1D9B43541B6A934A008F7F18 /* OperationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43351B6A934A008F7F18 /* OperationErrors.swift */; };
 		1D9B43551B6A934A008F7F18 /* OperationCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43361B6A934A008F7F18 /* OperationCondition.swift */; };
 		1D9B43561B6A934A008F7F18 /* SilentCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43371B6A934A008F7F18 /* SilentCondition.swift */; };
 		1D9B43571B6A934A008F7F18 /* NegatedCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D9B43381B6A934A008F7F18 /* NegatedCondition.swift */; };
@@ -643,7 +643,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Pluralsight;
 				TargetAttributes = {
 					1D9B430D1B6A92ED008F7F18 = {
@@ -763,7 +763,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1D9B43541B6A934A008F7F18 /* OperationErrors.swift in Sources */,
+				071E3745211465D90086B313 /* OperationErrors.swift in Sources */,
 				1D9B43551B6A934A008F7F18 /* OperationCondition.swift in Sources */,
 				1D9B43491B6A934A008F7F18 /* OperationQueue.swift in Sources */,
 				FD7564EB1EFDBB79006C2C45 /* State.swift in Sources */,
@@ -790,8 +790,6 @@
 				1D9B43571B6A934A008F7F18 /* NegatedCondition.swift in Sources */,
 				1D9B434D1B6A934A008F7F18 /* GroupOperation.swift in Sources */,
 				1D9B43501B6A934A008F7F18 /* DelayOperation.swift in Sources */,
-				55AE64D21BC180570097F4A5 /* LocationCapability-tvOS.swift in Sources */,
-				1D9B43541B6A934A008F7F18 /* OperationErrors.swift in Sources */,
 				1D9B43561B6A934A008F7F18 /* SilentCondition.swift in Sources */,
 				1D9B43661B6A934A008F7F18 /* UIUserNotifications+Operations.swift in Sources */,
 				1D9B435A1B6A934A008F7F18 /* ReachabilityCondition.swift in Sources */,
@@ -956,7 +954,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1008,7 +1006,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1035,7 +1033,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1074,7 +1071,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.pluralsight.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos macosx watchsimulator watchos";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -1108,9 +1104,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1134,8 +1127,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1159,9 +1150,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1185,8 +1173,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1266,7 +1252,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};
@@ -1313,7 +1298,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos appletvsimulator appletvos watchos watchsimulator macosx";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2,3,4";
 				TVOS_DEPLOYMENT_TARGET = 9.0;
 			};

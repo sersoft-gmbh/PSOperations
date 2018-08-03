@@ -9,7 +9,6 @@
 import XCTest
 @testable import PSOperations
 
-#if swift(>=3.1)
 fileprivate extension ErrorInformation.Key {
     static var stringTest: ErrorInformation.Key<String> {
         return .init(rawValue: "stringTest")
@@ -31,56 +30,22 @@ fileprivate extension ErrorInformation.Key {
         return .init(rawValue: "inexistent")
     }
 }
-#else
-fileprivate extension ErrorInformationKey {
-    static var stringTest: ErrorInformationKey<String> {
-        return .init(rawValue: "stringTest")
-    }
-    
-    static var boolTest: ErrorInformationKey<Bool> {
-        return .init(rawValue: "boolTest")
-    }
-    
-    static var sameKeyBool: ErrorInformationKey<Bool> {
-        return .init(rawValue: "sameKey")
-    }
-    
-    static var sameKeyString: ErrorInformationKey<String> {
-        return .init(rawValue: "sameKey")
-    }
-    
-    static var inexistent: ErrorInformationKey<Any> {
-        return .init(rawValue: "inexistent")
-    }
-}
-#endif
 
 class ErrorInformationTests: XCTestCase {
     
     func testErrorInformationKeyEquality() {
-        #if swift(>=3.1)
         let key1: ErrorInformation.Key<Bool> = .boolTest
         let key2: ErrorInformation.Key<Bool> = .boolTest
-        #else
-        let key1: ErrorInformationKey<Bool> = .boolTest
-        let key2: ErrorInformationKey<Bool> = .boolTest
-        #endif
-        
+
         XCTAssertTrue(key1 == key2)
         XCTAssertEqual(key1.hashValue, key2.hashValue)
         XCTAssertEqual(key1.rawValue, key2.rawValue)
     }
     
     func testErrorInformationKeyInequality() {
-        #if swift(>=3.1)
         let key1: ErrorInformation.Key<Bool> = .boolTest
         let key2: ErrorInformation.Key<String> = .stringTest
-        #else
-        let key1: ErrorInformationKey<Bool> = .boolTest
-        let key2: ErrorInformationKey<String> = .stringTest
-        #endif
-        
-        
+
         // Direct comparison is already prohibited by compiler due to different generic types.
         // XCTAssertFalse(key1 == key2)
         XCTAssertNotEqual(key1.hashValue, key2.hashValue)
@@ -96,21 +61,16 @@ class ErrorInformationTests: XCTestCase {
     }
     
     func testErrorInformationStoringValues() {
-        #if swift(>=3.1)
         let key1: ErrorInformation.Key<Bool> = .boolTest
         let key2: ErrorInformation.Key<String> = .stringTest
-        #else
-        let key1: ErrorInformationKey<Bool> = .boolTest
-        let key2: ErrorInformationKey<String> = .stringTest
-        #endif
         let value1 = true
         let value2 = "test"
         var info = ErrorInformation(key: key1, value: value1)
-        info.set(value: value2, for: key2)
+        info[key2] = value2
         
-        let retrievedValue1 = info.value(for: key1)
-        let retrievedValue2 = info.value(for: key2)
-        let retrievedInexistentValue = info.value(for: .inexistent)
+        let retrievedValue1 = info[key1]
+        let retrievedValue2 = info[key2]
+        let retrievedInexistentValue = info[.inexistent]
         XCTAssertNil(retrievedInexistentValue)
         XCTAssertNotNil(retrievedValue1)
         XCTAssertNotNil(retrievedValue2)
@@ -119,21 +79,16 @@ class ErrorInformationTests: XCTestCase {
     }
     
     func testErrorInformationStoringValuesWithSameRawValue() {
-        #if swift(>=3.1)
         let key1: ErrorInformation.Key<Bool> = .sameKeyBool
         let key2: ErrorInformation.Key<String> = .sameKeyString
-        #else
-        let key1: ErrorInformationKey<Bool> = .sameKeyBool
-        let key2: ErrorInformationKey<String> = .sameKeyString
-        #endif
         let value1 = true
         let value2 = "test"
         var info = ErrorInformation(key: key1, value: value1)
-        info.set(value: value2, for: key2)
+        info[key2] = value2
         
-        let retrievedValue1 = info.value(for: key1)
-        let retrievedValue2 = info.value(for: key2)
-        let retrievedInexistentValue = info.value(for: .inexistent)
+        let retrievedValue1 = info[key1]
+        let retrievedValue2 = info[key2]
+        let retrievedInexistentValue = info[.inexistent]
         XCTAssertNil(retrievedInexistentValue)
         XCTAssertNotNil(retrievedValue1)
         XCTAssertNotNil(retrievedValue2)

@@ -8,19 +8,11 @@ This file shows an example of implementing the OperationCondition protocol.
 
 import Foundation
 
-#if swift(>=3.1)
 public extension ErrorInformation.Key {
     public static var cancelledDependencies: ErrorInformation.Key<Array<Foundation.Operation>> {
         return .init(rawValue: "CancelledDependencies")
     }
 }
-#else
-public extension ErrorInformationKey {
-    public static var cancelledDependencies: ErrorInformationKey<Array<Foundation.Operation>> {
-        return .init(rawValue: "CancelledDependencies")
-    }
-}
-#endif
 
 /**
     A condition that specifies that every dependency must have succeeded.

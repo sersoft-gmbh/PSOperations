@@ -46,6 +46,7 @@ private func verifyAccountStatus(_ container: CKContainer, permission: CKContain
             } else {
                 completion(.authorized)
             }
+        @unknown default: completion(.notAvailable)
         }
     }
 }
@@ -64,6 +65,7 @@ private func verifyPermission(_ container: CKContainer, permission: CKContainer.
         case .couldNotComplete:
             let error = permissionError ?? CKError(CKError.permissionFailure)
             completion(.error(error))
+        @unknown default: completion(.notAvailable)
         }
     }
 }
@@ -78,6 +80,7 @@ private func requestPermission(_ container: CKContainer, permission: CKContainer
             case .couldNotComplete:
                 let error = requestError ?? CKError(CKError.permissionFailure)
                 completion(.error(error))
+            @unknown default: completion(.notAvailable)
             }
         }
     }

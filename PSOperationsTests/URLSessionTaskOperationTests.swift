@@ -1,7 +1,7 @@
 @testable import PSOperations
 import XCTest
 
-public extension URLSession {
+extension URLSession {
 
     struct SharedInstance {
         static var instance = URLSession.shared

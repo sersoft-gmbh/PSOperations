@@ -53,7 +53,7 @@ public class TimeoutObserver: OperationObserver {
     }
 }
 
-public extension TimeoutObserver {
+extension TimeoutObserver {
     public struct TimeoutError: Error, Equatable {
         public let timeout: TimeInterval
         
